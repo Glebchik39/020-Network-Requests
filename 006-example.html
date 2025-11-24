@@ -15,49 +15,71 @@
         .incomplete {
             color: red;
         }
+
+         th, td {
+      border: 1px solid #444;
+      padding: 10px 15px;
+      text-align: center;
+    }
     </style>
 </head>
 
 <body>
-    <button id="loadButton">Загрузить список задач</button> <span id="loader" style="display: none;">Загрузка...</span>
-    <div id="todoList">
-    </div>
+    <button id="loadButton">Загрузить список задач</button>
+     <span id="loader" style="display: none;">Загрузка...</span>
+
+    <table id="table" style="display: none;">
+        <tr>
+            <td>Id</td>
+            <td>Title</td>
+            <td>Complete</td>
+        </tr>
+        <tr>
+            <td id="id_content"></td>
+            <td id="title_content"></td>
+            <td id="Complete_content"></td>
+        </tr>
+    </table>
 
     <script>
+        let id_content = document.querySelector("#id_content");
+        let title_content = document.querySelector("#title_content");
+        let complete_content = document.querySelector("#Complete_content"); 
         let url = "https://jsonplaceholder.typicode.com/todos";
         let loadButton = document.querySelector("#loadButton");
-        let loader = document.querySelector("#loader");
-        let todoList = document.querySelector("#todoList");
+        let table = document.querySelector("#table");
+        // let loader = document.querySelector("#loader");
+        // let todoList = document.querySelector("#todoList");
 
         loadButton.addEventListener("click", function () {
-            showLoader();
             fetch(url)
                 .then(response => response.json())
                 .then(json => renderList(json))
-                .finally(hideLoader);
+                table.style.display = "block";
         });
 
-        function showLoader() {
-            loader.style.display = "inline";
-        }
+        // function showLoader() {
+        //     loader.style.display = "inline";
+        // }
 
-        function hideLoader() {
-            loader.style.display = "none";
-        }
+        // function hideLoader() {
+        //     loader.style.display = "none";
+        // }
 
         function renderList(list) {
             list.forEach(element => {
-                let div = document.createElement("div");
-                div.innerHTML = `${element.id} (${element.completed}) - ${element.title}`;
+                id_content.innerHTML += `${element.id}` + "</br>";
+                title_content.innerHTML += `${element.title}` + "</br>";
+                if(`${element.completed}` == "true")
+            {
+                complete_content.innerHTML += `✅` + "</br>";
+            }
 
-                if (element.completed) {
-                    div.classList.add("completed");
-                }
-                else {
-                    div.classList.add("incomplete");
-                }
-                
-                todoList.append(div);
+            if (`${element.completed}` == "false") {
+                complete_content.innerHTML += `❌` + "</br>";
+            }
+    
+
             });
         }
     </script>
